@@ -4,13 +4,11 @@ import Header from '../Header';
 import LoginContainer from '../LoginContainer';
 import styles from './styles.scss';
 
-const App = () => {
-  return(
-      <div className="app">
-        <Header className="header"/>
-        <LoginContainer />
-      </div>
-  );
-}
+const App = () => (
+  <div className={styles.app}>
+    <Header />
+    <LoginContainer />
+  </div>
+);
 
 export default App;
