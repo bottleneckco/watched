@@ -1,38 +1,40 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import CategoryTags from '../CategoryTags';
 import styles from './styles.scss';
 
 class Content extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = { emptyList: true };
-
-    this.handleSignOut = (e) => {
-      this.props.onSignOut(e);
-    }
+    this.state = {
+      emptyList: true,
+    };
   }
 
   render() {
-    if(this.state.emptyList) {
-      return(
-        <div className="content" id="content">
-          <h1>Looks like you're new! Select your favourite category from below.</h1>
-          <CategoryTags />
-          <div id='logoutBtn' className="logout" href="#" onClick={this.handleSignOut}>Sign out</div>
-        </div>
-      );
-    }
-    else {
-      return(
-          <div className="content" id="content">
-            <div>your watched list</div>
-            <div id='logoutBtn' className="logout" href="#" onClick={this.handleSignOut}>Sign out</div>
-          </div>
-      );
-    }
-
+    return (
+      <div className={styles.content} id="content">
+        {
+          this.state.emptyList ? (
+            <div>
+              <h1>Looks like you&#39;re new! Select your favourite category from below.</h1>
+              <CategoryTags />
+            </div>
+          ) : (
+            <div>
+              <h1>your watched list</h1>
+            </div>
+          )
+        }
+        <div id="logoutBtn" className={styles.logout} href="#" onClick={this.props.onSignOut}>Sign out</div>
+      </div>
+    );
   }
 }
+
+Content.propTypes = {
+  onSignOut: PropTypes.func.isRequired,
+};
 
 export default Content;

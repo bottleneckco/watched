@@ -9,31 +9,28 @@ class LoginContainer extends Component {
     super(props);
     this.state = { isLogin: false };
 
-    this.onSignIn = (googleUser) => {
-      if(!this.state.isLogin) {
-
-        this.setState({isLogin: true});
-
-        console.log('User signed in.')
+    this.onSignIn = () => {
+      if (!this.state.isLogin) {
+        this.setState({ isLogin: true });
+        console.log('User signed in.');
       }
-    }
+    };
 
-    this.onSignOut = (e) => {
-      var auth2 = gapi.auth2.getAuthInstance();
+    this.onSignOut = () => {
+      const auth2 = window.gapi.auth2.getAuthInstance();
       auth2.signOut().then(() => {
-
-        this.setState({isLogin: false});
-
+        this.setState({ isLogin: false });
         console.log('User signed out.');
       });
-    }
+    };
   }
 
   render() {
-    if(this.state.isLogin)
-      return <Content onSignOut={this.onSignOut} />
-    else
-      return <Login onSignIn={this.onSignIn} />
+    return this.state.isLogin ? (
+      <Content onSignOut={this.onSignOut} />
+    ) : (
+      <Login onSignIn={this.onSignIn} />
+    );
   }
 }
 
