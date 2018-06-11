@@ -12,7 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "babel-core": "^6.26.0",
-    "dotenv": "^6.0.0",
     "express": "^4.16.2",
     "google-images": "^2.1.0",
     "graceful-fs": "^4.1.11",
