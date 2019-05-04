@@ -30,13 +30,13 @@ class ContentPage extends Component {
   }
 
   componentDidMount() {
-
     this.unsubscribe = this.props.firebase.user(this.props.user.uid)
     .onSnapshot(snapshot => {
-      var showsLength = snapshot.data().watchlist.allShows.length;
       var newArray = [];
+      var customTagsDBLength = (snapshot.data().customTags) ? snapshot.data().customTags.length : 0;
+      var showsLength = (snapshot.data().watchlist) ? snapshot.data().watchlist.allShows.length : 0;
 
-      for(var i=0; i < (this.state.defaultTags.length + snapshot.data().customTags.length); i++) {
+      for(var i=0; i < (this.state.defaultTags.length + customTagsDBLength); i++) {
         newArray.push(null);
       }
       this.setState({
@@ -53,9 +53,9 @@ class ContentPage extends Component {
   }
 
   handleSubmit = (isWatchedSubmit) => {
-    console.log("submit button clicked: ", this.props.user.uid);
     var userRef = this.props.firebase.user(this.props.user.uid);
     var updateBatch = this.props.firebase.db.batch();
+    var allSubmittedTags = this.state.selectedTags;
     var formCustomTags = this.state.inputData.customTags.split(/, | ,|,/);     // custom tags submitted by form
     var newShowData = {
       name: this.state.inputData.name,
@@ -68,10 +68,8 @@ class ContentPage extends Component {
     else
       updateBatch.update(userRef, { "watchlist.allShows": this.props.firebase.fieldValue.arrayUnion(newShowData) });
 
-    ///////////////////////////////////////
-    // Update all tag fields
+    // Update custom tag field
     if(formCustomTags[0]) {
-      var allSubmittedTags = this.state.selectedTags;
       // Filter custom tags for existing tags
       if(this.state.customTagsDB[0] != '') {
         var filteredFormCustomTags = [];
@@ -99,25 +97,24 @@ class ContentPage extends Component {
       }
       else
         updateBatch.update(userRef, { "customTags": formCustomTags });
+    }
 
+    // Update all tag fields
+    if(allSubmittedTags[0]) {
+      var tagName = 'NIL';
+      var tagObj = {};
 
-      // Update database
-      if(allSubmittedTags[0]) {
-        var tagName = 'NIL';
-        var tagObj = {};
+      allSubmittedTags.forEach((tag) => {
+        if(tag) {
+          if(isWatchedSubmit)
+            tagName = "watched." + tag;
+          else
+            tagName = "watchlist." + tag;
 
-        allSubmittedTags.forEach((tag) => {
-          if(tag) {
-            if(isWatchedSubmit)
-              tagName = "watched." + tag;
-            else
-              tagName = "watchlist." + tag;
-
-            tagObj[tagName] = this.props.firebase.fieldValue.arrayUnion(newShowData);
-            updateBatch.update(userRef, tagObj);
-          }
-        });     //end forEach
-      }
+          tagObj[tagName] = this.props.firebase.fieldValue.arrayUnion(newShowData);
+          updateBatch.update(userRef, tagObj);
+        }
+      });     //end forEach
     }
 
     updateBatch.commit().then(
