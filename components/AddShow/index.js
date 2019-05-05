@@ -8,30 +8,30 @@ class AddShow extends Component {
 
   render() {
     const isListEmpty = this.props.emptyList;
-    let description, watchedButton;
-    
-    if(isListEmpty) {
+    let watchedButton;
+
+    if(isListEmpty)
       watchedButton = <div style={{display: 'none'}}></div>
-      description = <h2>Your list is empty.</h2>;
-    }
     else {
       watchedButton =
-        <button onClick={() => { this.props.onClick(this.state.inputData, true) }}
+        <button onClick={() => { this.props.onClick(true) }}
                 disabled={!this.props.isFormValid}>Add to Watched</button>
     }
 
     return(
-        <div className="addshow">
-          {description}
+      <div className={styles.popup}>
+        <div className={styles.form}>
+          {this.props.firstSubmit ?
+          <h1>Add Show</h1>
+        : <h1>Add Another Show</h1>}
+
           <form>
 
-            <div>Add to your list.</div>
             <input  name="name"
                     placeholder="Name"
                     type="text"
                     autoComplete="off"
                     onChange={this.props.onChange}
-                    required
             />
           <input  name="url"
                     placeholder="Link (optional)"
@@ -53,8 +53,10 @@ class AddShow extends Component {
               Add to Watchlist
             </button>
 
+            <button onClick={this.props.closePopup}>Exit form</button>
           </form>
         </div>
+      </div>
     );
   }
 }

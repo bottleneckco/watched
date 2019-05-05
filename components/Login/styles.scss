@@ -1,1 +1,21 @@
+.login {
+  width: 100px;
+  display: block;
+  margin: 5px auto;
+  text-align: center;
+  position: relative;
+  text-decoration: none;
+  border: none;
+  transition: transform 0.2s;
+  color: white;
+  background-color: #f9b18e;
+  font-size: 24px;
+  font-family: general, Helvetica, sans-serif;
 
+  &hover {
+    transform: scale(1.05);
+    border: solid dimgrey;
+    border-bottom: solid dimgrey 5px;
+  }
+
+}

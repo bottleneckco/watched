@@ -63,7 +63,7 @@ class LoginWithGoogle extends Component {
       return (
         <form onSubmit={this.onSubmit}>
           <h1>Please sign in.</h1>
-          <button type="submit">Sign In with Google</button>
+          <button className={styles.login} type="submit">Sign In with Google</button>
 
           {error && <p>{error.message}</p>}
         </form>

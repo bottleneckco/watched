@@ -20,13 +20,7 @@ class ContentHeader extends Component {
         <h1>WATCHED</h1>
         <h1>WATCHLIST</h1>
         <h2>{this.props.user.name}</h2>
-        <LogoutButton />
-          <AddShow  onClick={this.props.onClick}
-                    onChange={this.props.onChange}
-                    onTagClick={this.props.onTagClick}
-                    tags={this.props.tags}
-                    emptyList={this.props.emptyList}
-                    isFormValid={this.props.isFormValid} />
+        <LogoutButton className={styles.logout}/>
       </div>
     );
   }

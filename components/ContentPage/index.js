@@ -24,7 +24,9 @@ class ContentPage extends Component {
         url: '',
         customTags: '',     // custom tags that user typed during form submit
         isFormValid: false
-      }
+      },
+      showForm: false,
+      firstSubmit: false
     };
     console.log("Content Page");
   }
@@ -117,6 +119,8 @@ class ContentPage extends Component {
       });     //end forEach
     }
 
+    this.setState({ firstSubmit: false });
+
     updateBatch.commit().then(
       (result) => {
       console.log("update successful: ", result);
@@ -163,6 +167,13 @@ class ContentPage extends Component {
    this.setState({ inputData: updatedData });
  }
 
+ toggleAddShow = () => {
+   this.setState({
+     showForm: !this.state.showForm,
+     firstSubmit: true
+    });
+ }
+
   render() {
     if(this.state.emptyList === null) {
         return <h1> loading... </h1>
@@ -183,23 +194,35 @@ class ContentPage extends Component {
       let tags = this.state.defaultTags.concat(customTagsArray);
       tags = tags.filter(tag => tag != undefined)
 
-      if(this.state.emptyList) {
-        return <AddShow onClick={this.handleSubmit}
-                        onChange={this.handleChange}
-                        onTagClick={this.handleButtonTagClick}
-                        tags={tags}
-                        emptyList={this.state.emptyList}
-                        isFormValid={this.state.inputData.isFormValid} />
-      }
-      else {
-        return <ContentHeader user={this.state.user}
-                              onClick={this.handleSubmit}
-                              onChange={this.handleChange}
-                              onTagClick={this.handleButtonTagClick}
-                              tags={tags}
-                              emptyList={this.state.emptyList}
-                              isFormValid={this.state.inputData.isFormValid}/>
-      }
+      let emptyListWarning = this.state.emptyList ? (<h1>Your list is empty! Please add a show.</h1>) : null;
+      return (
+        <div>
+          {emptyListWarning}
+          <ContentHeader
+            user={this.state.user}
+            onClick={this.handleSubmit}
+            onChange={this.handleChange}
+            onTagClick={this.handleButtonTagClick}
+            tags={tags}
+            emptyList={this.state.emptyList}
+            isFormValid={this.state.inputData.isFormValid} />
+
+          <button onClick={this.toggleAddShow}>Add show</button>
+
+          {this.state.showForm ?
+            <AddShow
+              onClick={this.handleSubmit}
+              onChange={this.handleChange}
+              onTagClick={this.handleButtonTagClick}
+              tags={tags}
+              emptyList={this.state.emptyList}
+              closePopup={this.toggleAddShow}
+              firstSubmit={this.state.firstSubmit}
+              isFormValid={this.state.inputData.isFormValid} />
+            : null
+          }
+        </div>
+      );
     }
   }
 }
