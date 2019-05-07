@@ -14,8 +14,12 @@ class AddShow extends Component {
       watchedButton = <div style={{display: 'none'}}></div>
     else {
       watchedButton =
-        <button onClick={() => { this.props.onClick(true) }}
-                disabled={!this.props.isFormValid}>Add to Watched</button>
+        <button
+          onClick={() => {
+            this.props.onClick(true);
+            document.getElementById('addShowForm').reset();
+          }}
+          disabled={!this.props.isFormValid}>Add to Watched</button>
     }
 
     return(
@@ -25,29 +29,36 @@ class AddShow extends Component {
           <h1>Add Show</h1>
         : <h1>Add Another Show</h1>}
 
-          <form>
+          <form id='addShowForm'>
 
-            <input  name="name"
-                    placeholder="Name"
-                    type="text"
-                    autoComplete="off"
-                    onChange={this.props.onChange}
+            <input
+              name='name'
+              placeholder='Name'
+              type='text'
+              autoComplete='off'
+              onChange={this.props.onChange}
             />
-          <input  name="url"
-                    placeholder="Link (optional)"
-                    type="url"
-                    onChange={this.props.onChange}
+          <input
+            name='url'
+            placeholder='Link (optional)'
+            type='url'
+            onChange={this.props.onChange}
             />
 
             <h2>Tag the show</h2>
             <ButtonTags tags={this.props.tags} onTagClick={this.props.onTagClick} />
-            <input  name="customTags"
-                    placeholder="Custom Tags (separate by commas)"
-                    type="text"
-                    onChange={this.props.onChange}
+            <input
+              name='customTags'
+              placeholder='Custom Tags (separate by commas)'
+              type='text'
+              onChange={this.props.onChange}
             />
           {watchedButton}
-            <button onClick={() => { this.props.onClick(false) }}
+            <button
+              onClick={() => {
+                this.props.onClick(false);
+                document.getElementById('addShowForm').reset();
+              }}
                     disabled={!this.props.isFormValid}
                     >
               Add to Watchlist

@@ -17,8 +17,8 @@ class ContentHeader extends Component {
   render() {
     return (
       <div>
-        <h1>WATCHED</h1>
-        <h1>WATCHLIST</h1>
+        <h1 onClick={() => { this.props.onWatchedClick(false) }}>WATCHED</h1>
+        <h1 onClick={() => { this.props.onWatchlistClick(true) }}>WATCHLIST</h1>
         <h2>{this.props.user.name}</h2>
         <LogoutButton className={styles.logout}/>
       </div>
