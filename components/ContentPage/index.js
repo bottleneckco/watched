@@ -260,7 +260,7 @@ class ContentPage extends Component {
               onChange={this.handleChange}
               onTagClick={this.handleButtonTagClick}
               tags={tags}
-              emptyList={this.state.currentList ? true : false}
+              emptyList={this.state.currentList ? false : true}
               closePopup={this.toggleAddShow}
               firstSubmit={this.state.firstSubmit}
               isFormValid={this.state.inputData.isFormValid} />
