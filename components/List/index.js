@@ -25,7 +25,7 @@ class List extends Component {
     return(
       <div>
         <ul>
-          {this.props.data ? this.props.data.map(this.makeList) : <h1>No shows under these tag(s)</h1>}
+          {this.props.data.length != 0 ? this.props.data.map(this.makeList) : <h1>No shows under these tag(s)</h1>}
         </ul>
       </div>
     );

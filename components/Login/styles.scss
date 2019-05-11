@@ -12,7 +12,7 @@
   font-size: 24px;
   font-family: general, Helvetica, sans-serif;
 
-  &hover {
+  &:hover {
     transform: scale(1.05);
     border: solid dimgrey;
     border-bottom: solid dimgrey 5px;
