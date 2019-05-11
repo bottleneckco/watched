@@ -1,0 +1,23 @@
+button {
+  width: 100px;
+  display: block;
+  margin: 5px auto;
+  text-align: center;
+  position: relative;
+  text-decoration: none;
+  border-style: solid;
+  border-width: medium;
+  transition: transform 0.2s;
+  font-size: 24px;
+  font-family: general, Helvetica, sans-serif;
+
+  &:hover {
+    transform: scale(1.05);
+    border: solid dimgrey;
+    border-bottom: solid dimgrey 5px;
+  }
+
+  &:active {
+    border-style: inset;
+  }
+}
