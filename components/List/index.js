@@ -14,9 +14,14 @@ class List extends Component {
   makeList = (data, index) => {
     return (
       <li
-      key={data.name}
-      href={data.url} >
-      {data.name}
+      key={data.name} >
+        {
+          data.URL != "" ?
+          <a href={data.URL} target="_blank">
+            {data.name}
+          </a>
+          : data.name
+        }
       </li>
     );
   }
