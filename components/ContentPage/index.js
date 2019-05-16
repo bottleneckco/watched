@@ -146,10 +146,9 @@ class ContentPage extends Component {
     newSelectedArray = this.state.selectedTags.filter((tagName) => tagName != tagNameFound)  //unselected
     : newSelectedArray.push(tags.name);                                                       //selected
 
-    console.log(newSelectedArray);
     this.setState({
       selectedTags: newSelectedArray,
-      currentList: this.getSelectedShowsData(tags.name, tagNameFound, newSelectedArray)
+      currentList: this.state.showForm ? this.state.currentList : this.getSelectedShowsData(tags.name, tagNameFound, newSelectedArray)
     });
 }
 
@@ -233,9 +232,9 @@ class ContentPage extends Component {
  handleContentHeaderClick = (onWatchlistClick) => {
    var list = null;
    if(onWatchlistClick)
-     list = (watchlist) ? watchlist.allShows : [];
+     list = (this.state.user.watchlist.allShows) ? this.state.user.watchlist.allShows : [];
    else
-     list = (watched) ? watched.allShows : [];
+     list = (this.state.user.watched.allShows) ? this.state.user.watched.allShows : [];
 
    this.setState({
      viewWatchlist: onWatchlistClick,
@@ -244,8 +243,7 @@ class ContentPage extends Component {
  }
 
   render() {
-  console.log("currentList: ", this.state.currentList);
-  console.log("customTagsDB", this.state.customTagsDB);
+    console.log(this.state.selectedTags);
     if(this.state.currentList === null) {
         return <h1> loading... </h1>;
     }
@@ -276,11 +274,6 @@ class ContentPage extends Component {
 
           <button onClick={this.toggleAddShow}>Add show</button>
 
-          <ButtonTags
-            onTagClick={this.handleButtonTagClick}
-            tags={tags}
-            />
-
           {this.state.showForm ?
             <AddShow
               onClick={this.handleSubmit}
@@ -291,7 +284,11 @@ class ContentPage extends Component {
               closePopup={this.toggleAddShow}
               firstSubmit={this.state.firstSubmit}
               isFormValid={this.state.inputData.isFormValid} />
-            : null }
+            : <ButtonTags
+              onTagClick={this.handleButtonTagClick}
+              tags={tags}
+              />
+           }
 
           {this.state.currentList != 'empty' ?
             <List data={this.state.currentList} />
