@@ -1,7 +1,13 @@
-button {
+.buttonTags {
+  display: grid;
+  grid-auto-flow: row;
+  grid: auto / 1fr 1fr 1fr;
+}
+
+.buttonTags > button {
   width: 100px;
   display: block;
-  margin: 5px auto;
+  margin: 5px 5px;
   text-align: center;
   position: relative;
   text-decoration: none;

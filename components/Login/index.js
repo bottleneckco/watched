@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { withFirebase } from '../Firebase';
+import Header from '../Header';
 import ContentPage from '../ContentPage';
 import styles from './styles.scss';
 
@@ -61,12 +62,15 @@ class LoginWithGoogle extends Component {
       return <ContentPage user={this.state.user}/>
     else {
       return (
-        <form onSubmit={this.onSubmit}>
-          <h1>Please sign in.</h1>
-          <button className={styles.login} type="submit">Sign In with Google</button>
+        <div>
+          <Header />
+          <form onSubmit={this.onSubmit}>
+            <h1>Please sign in.</h1>
+            <button className={styles.login} type="submit">Sign In with Google</button>
 
-          {error && <p>{error.message}</p>}
-        </form>
+            {error && <p>{error.message}</p>}
+          </form>
+        </div>
       );
     }
   }

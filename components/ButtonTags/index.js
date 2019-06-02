@@ -25,7 +25,7 @@ class ButtonTags extends Component {
 
   render() {
     return (
-      <div>
+      <div className={styles.buttonTags}>
         {this.props.tags.map(this.makeButton)}
       </div>
     );

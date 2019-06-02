@@ -1,0 +1,23 @@
+.list {
+  color: #444;
+  background-color: silver;
+  font-size: 30px;
+  text-align: left;
+  list-style-type: none;
+
+  & > li {
+    border-bottom: 1px solid white;
+  }
+
+  & > a {
+    transition: transform 0.2s;
+    color: black;
+  }
+
+  a:hover {
+  transform: scale(1.05);
+  color: blue;
+  border: solid dimgrey;
+  border-bottom: solid dimgrey 5px;
+  }
+}

@@ -1,0 +1,23 @@
+.logoutButton {
+  width: 100px;
+  text-align: center;
+  position: relative;
+  text-decoration: none;
+  margin: 5px auto;
+  border-style: solid;
+  border-width: medium;
+  transition: transform 0.2s;
+  color: red;
+  font-size: 16px;
+  font-family: general, Helvetica, sans-serif;
+
+  grid-area: 1 / 2 / 2 / 3;
+
+  &:hover {
+    transform: scale(1.05);
+    color: white;
+    background-color: red;
+    border: solid dimgrey;
+    border-bottom: solid dimgrey 5px;
+  }
+}
