@@ -4,6 +4,7 @@ import { withFirebase } from '../Firebase';
 import AddShow from '../AddShow';
 import ButtonTags from '../ButtonTags';
 import ContentHeader from '../ContentHeader';
+import LogoutButton from '../LogoutButton';
 import List from '../List';
 import styles from './styles.scss';
 
@@ -265,33 +266,47 @@ class ContentPage extends Component {
       tags = tags.filter(tag => tag != undefined);
 
       return (
-        <div>
-          <ContentHeader
-            onWatchedClick={this.handleContentHeaderClick}
-            onWatchlistClick={this.handleContentHeaderClick}
-            user={this.state.user}
-            />
+        <div className={styles.contentPage}>
+          <div className={styles.header}>
+            <ContentHeader
+              onWatchedClick={this.handleContentHeaderClick}
+              onWatchlistClick={this.handleContentHeaderClick}
+              user={this.state.user}
+              />
+          </div>
 
-          <button onClick={this.toggleAddShow}>Add show</button>
+          <div className={styles.headerButtons}>
+            <div className={styles.logout}>
+              <LogoutButton/>
+            </div>
+            <button className={styles.addShowButton} onClick={this.toggleAddShow}>Add show</button>
+          </div>
 
           {this.state.showForm ?
-            <AddShow
-              onClick={this.handleSubmit}
-              onChange={this.handleChange}
-              onTagClick={this.handleButtonTagClick}
-              tags={tags}
-              emptyList={this.state.currentList != 'empty' ? false : true}
-              closePopup={this.toggleAddShow}
-              firstSubmit={this.state.firstSubmit}
-              isFormValid={this.state.inputData.isFormValid} />
-            : <ButtonTags
-              onTagClick={this.handleButtonTagClick}
-              tags={tags}
-              />
+            <div className={styles.addShowForm}>
+              <AddShow
+                onClick={this.handleSubmit}
+                onChange={this.handleChange}
+                onTagClick={this.handleButtonTagClick}
+                tags={tags}
+                emptyList={this.state.currentList != 'empty' ? false : true}
+                closePopup={this.toggleAddShow}
+                firstSubmit={this.state.firstSubmit}
+                isFormValid={this.state.inputData.isFormValid} />
+            </div>
+            :
+            <div className={styles.tags}>
+              <ButtonTags
+                onTagClick={this.handleButtonTagClick}
+                tags={tags}
+                />
+            </div>
            }
 
           {this.state.currentList != 'empty' ?
-            <List data={this.state.currentList} />
+            <div className={styles.showsList}>
+              <List data={this.state.currentList} />
+            </div>
           : <h1>Your list is empty! Please add a show.</h1> }
         </div>
       );

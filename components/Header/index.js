@@ -6,7 +6,7 @@ class Header extends Component {
 
   render() {
     return (
-      <div className="header">
+      <div className={styles.loginHeader}>
         <h1>Watched</h1>
       </div>
     );
