@@ -289,7 +289,13 @@ class ContentPage extends Component {
             <div className={styles.logout}>
               <LogoutButton/>
             </div>
-            <button className={styles.addShowButton} onClick={this.toggleAddShow}>Add show</button>
+            <button
+              className={styles.addShowButton}
+              onClick={this.toggleAddShow}>
+              {this.state.showForm ?
+              "Close"
+              : "Add Show" }
+            </button>
           </div>
 
           {this.state.showForm ?
@@ -300,7 +306,6 @@ class ContentPage extends Component {
                 onTagClick={this.handleButtonTagClick}
                 tags={tags}
                 emptyList={this.state.currentList != 'empty' ? false : true}
-                closePopup={this.toggleAddShow}
                 firstSubmit={this.state.firstSubmit}
                 isFormValid={this.state.inputData.isFormValid} />
             </div>
