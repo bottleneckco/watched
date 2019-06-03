@@ -65,7 +65,7 @@ class LoginWithGoogle extends Component {
         <div>
           <Header />
           <form onSubmit={this.onSubmit}>
-            <h1>Please sign in.</h1>
+            <h1 className={styles.signInMessage}>Please sign in.</h1>
             <button className={styles.login} type="submit">Sign In with Google</button>
 
             {error && <p>{error.message}</p>}

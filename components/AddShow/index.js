@@ -14,7 +14,7 @@ class AddShow extends Component {
       watchedButton = <div style={{display: 'none'}}></div>
     else {
       watchedButton =
-        <button
+        <button className={styles.addToWatched}
           onClick={() => {
             this.props.onClick(true);
             document.getElementById('addShowForm').reset();
@@ -29,40 +29,53 @@ class AddShow extends Component {
           <h1>Add Show</h1>
         : <h1>Add Another Show</h1>}
 
-          <form id='addShowForm'>
+          <form
+            className={styles.addShowForm}
+            id='addShowForm'
+            >
 
             <input
+              className={styles.nameInput}
               name='name'
               placeholder='Name'
               type='text'
               autoComplete='off'
               onChange={this.props.onChange}
-            />
-          <input
-            name='url'
-            placeholder='Link (optional)'
-            type='url'
-            onChange={this.props.onChange}
-            />
+              />
 
-            <h2>Tag the show</h2>
-            <ButtonTags tags={this.props.tags} onTagClick={this.props.onTagClick} />
             <input
+              className={styles.urlInput}
+              name='url'
+              placeholder='Link (optional)'
+              type='url'
+              onChange={this.props.onChange}
+              />
+
+            <h2 className={styles.formTagsHeading}>Tag the show</h2>
+            <div className={styles.formTags}>
+              <ButtonTags tags={this.props.tags} onTagClick={this.props.onTagClick} />
+            </div>
+
+            <input
+              className={styles.customTagsInput}
               name='customTags'
               placeholder='Custom Tags (separate by commas)'
               type='text'
               onChange={this.props.onChange}
-            />
-          {watchedButton}
+              />
+
             <button
+              className={styles.addToWatchlist}
               onClick={() => {
                 this.props.onClick(false);
                 document.getElementById('addShowForm').reset();
               }}
-                    disabled={!this.props.isFormValid}
-                    >
-              Add to Watchlist
-            </button>
+              disabled={!this.props.isFormValid}
+              >
+                Add to Watchlist
+              </button>
+
+            {watchedButton}
 
             <button onClick={this.props.closePopup}>Exit form</button>
           </form>
