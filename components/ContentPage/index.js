@@ -17,10 +17,19 @@ class ContentPage extends Component {
       customTagsDB: null,       // custom tags that is in database
       selectedTags: [],      // tags that user selected
       defaultTags: [
+        {name: 'Chinese', color: '#FF7373'},
+        {name: 'English', color: '#FF7373'},
+        {name: 'Indian', color: '#FF7373'},
+        {name: 'Japanese', color: '#FF7373'},
+        {name: 'Korean', color: '#FF7373'},
+        {name: 'Thai', color: '#FF7373'},
+
         {name: 'Comedy', color: '#FFFF00'},
-        {name: 'Drama', color: '#FF7373'},
-        {name: 'English', color: '#33FFFF'},
-        {name: 'Movies', color: '#7B68EE'}
+        {name: 'Documentary', color: '#FFFF00'},
+        {name: 'Drama', color: '#FFFF00'},
+        {name: 'Horror', color: '#FFFF00'},
+        {name: 'Movies', color: '#FFFF00'},
+        {name: 'Variety', color: '#FFFF00'}
       ],
       inputData: {
         name: '',
@@ -39,13 +48,6 @@ class ContentPage extends Component {
   componentDidMount() {
     this.unsubscribe = this.props.firebase.user(this.props.user.uid)
     .onSnapshot(snapshot => {
-      /*var newArray = [];
-      var customTagsDBLength = (snapshot.data().customTags) ? snapshot.data().customTags.length : 0;
-
-      for(var i=0; i < (this.state.defaultTags.length + customTagsDBLength); i++) {
-        newArray.push(null);
-      }*/
-
       this.setState({
         user: snapshot.data(),
         customTagsDB: snapshot.data().customTags ? snapshot.data().customTags : [],
@@ -232,10 +234,18 @@ class ContentPage extends Component {
 
  handleContentHeaderClick = (onWatchlistClick) => {
    var list = null;
-   if(onWatchlistClick)
-     list = (this.state.user.watchlist.allShows) ? this.state.user.watchlist.allShows : [];
-   else
-     list = (this.state.user.watched.allShows) ? this.state.user.watched.allShows : [];
+   if(onWatchlistClick) {
+    if(this.state.user.watchlist)
+      list = (this.state.user.watchlist.allShows) ? this.state.user.watchlist.allShows : [];
+    else
+      list = 'empty';
+   }
+   else {
+     if(this.state.user.watched)
+       list = (this.state.user.watched.allShows) ? this.state.user.watched.allShows : [];
+     else
+       list = 'empty';
+   }
 
    this.setState({
      viewWatchlist: onWatchlistClick,

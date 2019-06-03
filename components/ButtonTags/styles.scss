@@ -1,11 +1,11 @@
 .buttonTags {
   display: grid;
   grid-auto-flow: row;
-  grid: auto / 1fr 1fr 1fr;
+  grid: auto / 1fr 1fr;
+  justify-items: stretch;
 }
 
 .buttonTags > button {
-  width: 100px;
   display: block;
   margin: 5px 5px;
   text-align: center;
@@ -14,7 +14,7 @@
   border-style: solid;
   border-width: medium;
   transition: transform 0.2s;
-  font-size: 24px;
+  font-size: 20px;
   font-family: general, Helvetica, sans-serif;
 
   &:hover {
