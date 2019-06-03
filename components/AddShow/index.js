@@ -23,47 +23,47 @@ class AddShow extends Component {
     }
 
     return(
-      <div className={styles.popup}>
-        <div className={styles.form}>
-          {this.props.firstSubmit ?
-          <h1>Add Show</h1>
-        : <h1>Add Another Show</h1>}
+      <div className={styles.formContainer}>
+        {this.props.firstSubmit ?
+        <h1>Add Show</h1>
+      : <h1>Add Another Show</h1>}
 
-          <form
-            className={styles.addShowForm}
-            id='addShowForm'
-            >
+        <form
+          className={styles.addShowForm}
+          id='addShowForm'
+          >
 
-            <input
-              className={styles.nameInput}
-              name='name'
-              placeholder='Name'
-              type='text'
-              autoComplete='off'
-              onChange={this.props.onChange}
-              />
+          <input
+            className={styles.nameInput}
+            name='name'
+            placeholder='Name (required)'
+            type='text'
+            autoComplete='off'
+            onChange={this.props.onChange}
+            />
 
-            <input
-              className={styles.urlInput}
-              name='url'
-              placeholder='Link (optional)'
-              type='url'
-              onChange={this.props.onChange}
-              />
+          <input
+            className={styles.urlInput}
+            name='url'
+            placeholder='Link'
+            type='url'
+            onChange={this.props.onChange}
+            />
 
-            <h2 className={styles.formTagsHeading}>Tag the show</h2>
-            <div className={styles.formTags}>
-              <ButtonTags tags={this.props.tags} onTagClick={this.props.onTagClick} />
-            </div>
+          <h2 className={styles.formTagsHeading}>Tag the show</h2>
+          <div className={styles.formTags}>
+            <ButtonTags tags={this.props.tags} onTagClick={this.props.onTagClick} />
+          </div>
 
-            <input
-              className={styles.customTagsInput}
-              name='customTags'
-              placeholder='Custom Tags (separate by commas)'
-              type='text'
-              onChange={this.props.onChange}
-              />
+          <input
+            className={styles.customTagsInput}
+            name='customTags'
+            placeholder='Custom Tags (separate by &apos;,&apos; )'
+            type='text'
+            onChange={this.props.onChange}
+            />
 
+          <div className={styles.formButtons}>
             <button
               className={styles.addToWatchlist}
               onClick={() => {
@@ -76,10 +76,8 @@ class AddShow extends Component {
               </button>
 
             {watchedButton}
-
-            <button onClick={this.props.closePopup}>Exit form</button>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     );
   }

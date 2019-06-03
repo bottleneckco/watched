@@ -1,21 +1,87 @@
-.popup {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  background-color: rgba(0,0,0, 0.5);
+.formContainer {
+  & > h1 {
+    margin: 10px 0 0 0;
+  }
 }
 
-.form {
-  position: absolute;
-  left: 25%;
-  right: 25%;
-  top: 25%;
-  bottom: 25%;
-  margin: auto;
-  background: white;
+.addShowForm {
+  display: grid;
+  grid: none;
+}
+
+.nameInput {
+  grid-row: 1 / 2;
+
+  width: 90%;
+  height: 35px;
+  font-size: 18px;
+  padding: 2px 0px 2px 12px;
+  margin: 0px 0px 5px 5px;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
+.urlInput {
+  grid-row: 2 / 3;
+
+  width: 90%;
+  height: 35px;
+  font-size: 18px;
+  padding: 2px 0px 2px 12px;
+  margin: 0px 0px 5px 5px;
+  border-radius: 5px;
+}
+
+.formTagsHeading {
+  grid-row: 3 / 4;
+
+  margin: 10px 0 0 0;
+}
+
+.formTags {
+  grid-row: 4 / 5;
+}
+
+.customTagsInput {
+  grid-row: 5 / 6;
+
+
+  width: 90%;
+  height: 35px;
+  font-size: 18px;
+  padding: 2px 0px 2px 12px;
+  margin: 5px 0px 5px 5px;
+  border-radius: 5px;
+}
+
+.formButtons {
+  display: grid;
+  grid: auto / 1fr 1fr;
+  grid-row: 6 / 7;
+
+  & > button {
+    margin: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    border-style: solid;
+    border-width: medium;
+    transition: transform 0.2s;
+    font-size: 16px;
+    font-family: general, Helvetica, sans-serif;
+
+    &:hover {
+      color: white;
+      background-color: silver;
+      border: solid dimgrey;
+      border-bottom: solid dimgrey 5px;
+    }
+  }
+}
+
+.addToWatchlist {
+  grid-column: 1 / 2;
+}
+
+.addToWatched {
+  grid-column: 2 / 3;
 }

@@ -1,7 +1,7 @@
 .contentPage {
   display: grid;
   grid: auto auto / 3fr 1fr;
-  grid-gap: 2px;
+  grid-gap: 10px;
   background-color: #fff;
   color: #444;
 }
@@ -26,8 +26,7 @@
 .addShowButton {
   grid-row: 2 / 3;
   justify-self: stretch;
-  align-self: flex-end;
-  margin: auto 5px;
+  align-self: flex-start;
   text-align: center;
   padding: 20px;
   text-decoration: none;
