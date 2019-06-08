@@ -11,8 +11,8 @@
   text-align: center;
   position: relative;
   text-decoration: none;
-  border-style: solid;
-  border-width: medium;
+  filter: brightness(80%);
+  border: medium solid white;
   transition: transform 0.2s;
   font-size: 20px;
   font-family: general, Helvetica, sans-serif;

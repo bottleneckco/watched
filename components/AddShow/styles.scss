@@ -75,6 +75,12 @@
       border: solid dimgrey;
       border-bottom: solid dimgrey 5px;
     }
+
+    &:active {
+      background-color: #686868;
+      color: #fff;
+      border-style: inset;
+    }
   }
 }
 
