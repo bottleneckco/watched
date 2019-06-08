@@ -16,12 +16,12 @@ class AddShow extends Component {
       watchedButton =
         <button className={styles.addToWatched}
           onClick={() => {
-            this.props.onClick(true);
             document.getElementById('addShowForm').reset();
+            this.props.onClick(true);
           }}
           disabled={!this.props.isFormValid}>Add to Watched</button>
     }
-
+    
     return(
       <div className={styles.formContainer}>
         {this.props.firstSubmit ?
@@ -67,8 +67,8 @@ class AddShow extends Component {
             <button
               className={styles.addToWatchlist}
               onClick={() => {
-                this.props.onClick(false);
                 document.getElementById('addShowForm').reset();
+                this.props.onClick(false);
               }}
               disabled={!this.props.isFormValid}
               >

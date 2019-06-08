@@ -125,7 +125,13 @@ class ContentPage extends Component {
       });     //end forEach
     }
 
-    this.setState({ firstSubmit: false });
+    let updatedData = this.state.inputData;
+    updatedData['isFormValid'] = false;
+
+    this.setState({
+      firstSubmit: false,
+      inputData: updatedData
+     });
 
     updateBatch.commit().then(
       (result) => {
@@ -275,6 +281,11 @@ class ContentPage extends Component {
       let tags = this.state.defaultTags.concat(customTagsArray);
       tags = tags.filter(tag => tag != undefined);
 
+      var selectedStyle = {
+        backgroundColor: this.state.showForm ? '#444' : '#fff',
+        color: this.state.showForm ? '#fff' : '#444'
+      };
+
       return (
         <div className={styles.contentPage}>
           <div className={styles.header}>
@@ -291,7 +302,8 @@ class ContentPage extends Component {
             </div>
             <button
               className={styles.addShowButton}
-              onClick={this.toggleAddShow}>
+              onClick={this.toggleAddShow}
+              style={selectedStyle}>
               {this.state.showForm ?
               "Close"
               : "Add Show" }
