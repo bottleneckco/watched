@@ -9,7 +9,7 @@ class ButtonTags extends Component {
     this.state = { buttons: {} };
   }
 
-   makeButton = (tags, index) => {
+  makeButton = (tags, index) => {
     var buttonStyle = {
       backgroundColor: tags.color
     };

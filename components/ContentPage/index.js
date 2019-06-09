@@ -157,7 +157,7 @@ class ContentPage extends Component {
 
     this.setState({
       selectedTags: newSelectedArray,
-      currentList: this.state.showForm ? this.state.currentList : this.getSelectedShowsData(tags.name, tagNameFound, newSelectedArray)
+      currentList: this.state.showForm ? this.state.currentList : this.getSelectedShowsData(tags.name, tagNameFound, newSelectedArray, this.state.viewWatchlist)
     });
 }
 
@@ -176,20 +176,20 @@ class ContentPage extends Component {
    this.setState({ inputData: updatedData });
  }
 
- getSelectedShowsData = (tagName, isTagUnselected, sTags) => {
+ getSelectedShowsData = (tagName, isTagUnselected, sTags, isWatchlist) => {
    var cList = this.state.currentList;
-   var userList = this.state.viewWatchlist ? this.state.user.watchlist : this.state.user.watched;
+   var userList = isWatchlist ? this.state.user.watchlist : this.state.user.watched;
    var newData = [];
 
    if(!this.state.showForm) {
      if(sTags.length > 1) {
 
        if(isTagUnselected) {
-         newData = (userList[sTags[0]]) ? userList[sTags[0]] : [];
+         newData = userList[sTags[0]] || [];
 
          for(let i=1; i < sTags.length; i++) {
            let tempList = [];
-           let currentTagShows = userList[sTags[i]] ? userList[sTags[i]] : [];
+           let currentTagShows = userList[sTags[i]] || [];
 
            currentTagShows.forEach((show) => {
              for(let i = 0; i < newData.length; i++) {
@@ -203,7 +203,7 @@ class ContentPage extends Component {
          }
        }
        else {
-         let selectedTagShows = userList[tagName] ? userList[tagName] : [];
+         let selectedTagShows = userList[tagName] || [];
 
          selectedTagShows.forEach((show) => {
            for(let i = 0; i < cList.length; i++) {
@@ -220,7 +220,7 @@ class ContentPage extends Component {
          case 0: newData = userList.allShows;
          break;
 
-         case 1: newData = (userList[sTags[0]]) ? userList[sTags[0]] : [];
+         case 1: newData = userList[sTags[0]] || [];
          break;
 
          default: []
@@ -239,19 +239,22 @@ class ContentPage extends Component {
  }
 
  handleContentHeaderClick = (onWatchlistClick) => {
-   var list = null;
-   if(onWatchlistClick) {
-    if(this.state.user.watchlist)
-      list = (this.state.user.watchlist.allShows) ? this.state.user.watchlist.allShows : [];
+   var userList = onWatchlistClick ? this.state.user.watchlist : this.state.user.watched;
+   var list = this.getSelectedShowsData('', false, this.state.selectedTags, onWatchlistClick);
+
+   if(userList) {
+     if(userList.allShows) {
+       if(this.state.selectedTags.length > 1) {
+         this.state.selectedTags.forEach((tag) => {
+           list = list.concat(this.getSelectedShowsData(tag, false, this.state.selectedTags, onWatchlistClick));
+         });
+        }
+      }
+      else
+        list = (this.state.selectedTags.length != 0) ? [] : 'empty';
+    }
     else
       list = 'empty';
-   }
-   else {
-     if(this.state.user.watched)
-       list = (this.state.user.watched.allShows) ? this.state.user.watched.allShows : [];
-     else
-       list = 'empty';
-   }
 
    this.setState({
      viewWatchlist: onWatchlistClick,
