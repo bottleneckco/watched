@@ -5,6 +5,10 @@ import Header from '../Header';
 import styles from './styles.scss';
 
 class AddShow extends Component {
+  constructor(props) {
+    super(props);
+    this.formRef = React.createRef();
+  }
 
   render() {
     const isListEmpty = this.props.emptyList;
@@ -16,12 +20,12 @@ class AddShow extends Component {
       watchedButton =
         <button className={styles.addToWatched}
           onClick={() => {
-            document.getElementById('addShowForm').reset();
+            this.formRef.current.reset();
             this.props.onClick(true);
           }}
           disabled={!this.props.isFormValid}>Add to Watched</button>
     }
-    
+
     return(
       <div className={styles.formContainer}>
         {this.props.firstSubmit ?
@@ -30,6 +34,7 @@ class AddShow extends Component {
 
         <form
           className={styles.addShowForm}
+          ref={this.formRef}
           id='addShowForm'
           >
 
@@ -67,7 +72,7 @@ class AddShow extends Component {
             <button
               className={styles.addToWatchlist}
               onClick={() => {
-                document.getElementById('addShowForm').reset();
+                this.formRef.current.reset();
                 this.props.onClick(false);
               }}
               disabled={!this.props.isFormValid}
