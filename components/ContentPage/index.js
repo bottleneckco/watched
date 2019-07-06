@@ -81,30 +81,22 @@ class ContentPage extends Component {
       // Filter custom tags for existing tags
       if(this.state.customTagsDB.length != 0) {
         var filteredFormCustomTags = [];
-        var inDB = false;
 
-        formCustomTags.forEach((formTag) => {
-          this.state.customTagsDB.forEach((DBtag) => {
-            if(formTag === DBtag)
-              inDB = true;
-          });
-
-          if(!inDB)
-            filteredFormCustomTags.push(formTag);
-          else
-            inDB = false;
+        filteredFormCustomTags = formCustomTags.filter((formTag) => {     // filter out custom tags that already exists
+          return !this.state.customTagsDB.includes(formTag);
         });
 
-        if(filteredFormCustomTags[0]) {
-          var updatedCustomTags = this.state.customTagsDB.concat(filteredFormCustomTags);
+          if(filteredFormCustomTags[0]) {
+            var updatedCustomTags = this.state.customTagsDB.concat(filteredFormCustomTags);
 
-          allSubmittedTags = filteredFormCustomTags.concat(this.state.selectedTags);
-          updateBatch.update(userRef, { "customTags": updatedCustomTags });
-          this.setState({ customTagsDB: updatedCustomTags });
-        }
+            updateBatch.update(userRef, { "customTags": updatedCustomTags });
+            this.setState({ customTagsDB: updatedCustomTags });
+          }
       }
       else
         updateBatch.update(userRef, { "customTags": formCustomTags });
+
+      allSubmittedTags = formCustomTags.concat(this.state.selectedTags);
     }
 
     // Update all tag fields
@@ -336,7 +328,9 @@ class ContentPage extends Component {
 
           {this.state.currentList != 'empty' ?
             <div className={styles.showsList}>
-              <List data={this.state.currentList} />
+              <List
+                data={this.state.currentList}
+                viewWatchlist={this.state.viewWatchlist} />
             </div>
           : <h1>Your list is empty! Please add a show.</h1> }
         </div>
