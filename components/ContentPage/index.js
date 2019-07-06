@@ -152,12 +152,12 @@ class ContentPage extends Component {
     var tagNameFound = this.state.selectedTags.find((tagName) => { return tagName === tags.name });
 
     tagNameFound ?
-    newSelectedArray = this.state.selectedTags.filter((tagName) => tagName != tagNameFound)  //unselected
-    : newSelectedArray.push(tags.name);                                                       //selected
+    newSelectedArray = this.state.selectedTags.filter((tagName) => tagName != tagNameFound)  // unselecting
+    : newSelectedArray.push(tags.name);                                                       // selecting
 
     this.setState({
       selectedTags: newSelectedArray,
-      currentList: this.state.showForm ? this.state.currentList : this.getSelectedShowsData(tags.name, tagNameFound, newSelectedArray, this.state.viewWatchlist)
+      currentList: this.state.showForm ? this.state.currentList : this.getSelectedTagData(tags.name, tagNameFound, newSelectedArray, this.state.viewWatchlist)
     });
 }
 
@@ -176,7 +176,7 @@ class ContentPage extends Component {
    this.setState({ inputData: updatedData });
  }
 
- getSelectedShowsData = (tagName, isTagUnselected, sTags, isWatchlist) => {
+ getSelectedTagData = (tagName, isTagUnselected, sTags, isWatchlist) => {
    var cList = this.state.currentList;
    var userList = isWatchlist ? this.state.user.watchlist : this.state.user.watched;
    var newData = [];
@@ -240,15 +240,16 @@ class ContentPage extends Component {
 
  handleContentHeaderClick = (onWatchlistClick) => {
    var userList = onWatchlistClick ? this.state.user.watchlist : this.state.user.watched;
-   var list = this.getSelectedShowsData('', false, this.state.selectedTags, onWatchlistClick);
+   var list = [];
 
    if(userList) {
      if(userList.allShows) {
        if(this.state.selectedTags.length > 1) {
-         this.state.selectedTags.forEach((tag) => {
-           list = list.concat(this.getSelectedShowsData(tag, false, this.state.selectedTags, onWatchlistClick));
-         });
-        }
+           list = this.getSelectedTagData(this.state.selectedTags[0], true, this.state.selectedTags, onWatchlistClick);
+         }
+         else {
+           list = this.getSelectedTagData(this.state.selectedTags[0], false, this.state.selectedTags, onWatchlistClick);
+         }
       }
       else
         list = (this.state.selectedTags.length != 0) ? [] : 'empty';
