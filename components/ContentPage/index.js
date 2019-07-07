@@ -48,10 +48,15 @@ class ContentPage extends Component {
   componentDidMount() {
     this.unsubscribe = this.props.firebase.user(this.props.user.uid)
     .onSnapshot(snapshot => {
+      let cList = 'empty';
+      if(snapshot.data().watchlist) {
+        cList = snapshot.data().watchlist.allShows ? snapshot.data().watchlist.allShows : 'empty';
+      }
+
       this.setState({
         user: snapshot.data(),
         customTagsDB: snapshot.data().customTags ? snapshot.data().customTags : [],
-        currentList: snapshot.data().watchlist ? snapshot.data().watchlist.allShows : 'empty'
+        currentList: cList
       });
     });
   }
@@ -330,7 +335,9 @@ class ContentPage extends Component {
             <div className={styles.showsList}>
               <List
                 data={this.state.currentList}
-                viewWatchlist={this.state.viewWatchlist} />
+                uid={this.props.user.uid}
+                viewWatchlist={this.state.viewWatchlist}
+                 />
             </div>
           : <h1>Your list is empty! Please add a show.</h1> }
         </div>
