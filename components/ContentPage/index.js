@@ -86,7 +86,7 @@ class ContentPage extends Component {
       // Filter custom tags for existing tags
       if(this.state.customTagsDB.length != 0) {
         var filteredFormCustomTags = [];
-
+        
         filteredFormCustomTags = formCustomTags.filter((formTag) => {     // filter out custom tags that already exists
           return !this.state.customTagsDB.includes(formTag);
         });
@@ -155,6 +155,7 @@ class ContentPage extends Component {
     this.setState({
       selectedTags: newSelectedArray,
       currentList: this.state.showForm ? this.state.currentList : this.getSelectedTagData(tags.name, tagNameFound, newSelectedArray, this.state.viewWatchlist)
+
     });
 }
 
@@ -174,6 +175,7 @@ class ContentPage extends Component {
  }
 
  getSelectedTagData = (tagName, isTagUnselected, sTags, isWatchlist) => {
+
    var cList = this.state.currentList;
    var userList = isWatchlist ? this.state.user.watchlist : this.state.user.watched;
    var newData = [];
@@ -237,6 +239,7 @@ class ContentPage extends Component {
 
  handleContentHeaderClick = (onWatchlistClick) => {
    var userList = onWatchlistClick ? this.state.user.watchlist : this.state.user.watched;
+
    var list = [];
 
    if(userList) {
