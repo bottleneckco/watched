@@ -48,10 +48,15 @@ class ContentPage extends Component {
   componentDidMount() {
     this.unsubscribe = this.props.firebase.user(this.props.user.uid)
     .onSnapshot(snapshot => {
+      let cList = 'empty';
+      if(snapshot.data().watchlist) {
+        cList = snapshot.data().watchlist.allShows ? snapshot.data().watchlist.allShows : 'empty';
+      }
+
       this.setState({
         user: snapshot.data(),
         customTagsDB: snapshot.data().customTags ? snapshot.data().customTags : [],
-        currentList: snapshot.data().watchlist ? snapshot.data().watchlist.allShows : 'empty'
+        currentList: cList
       });
     });
   }
@@ -81,30 +86,22 @@ class ContentPage extends Component {
       // Filter custom tags for existing tags
       if(this.state.customTagsDB.length != 0) {
         var filteredFormCustomTags = [];
-        var inDB = false;
-
-        formCustomTags.forEach((formTag) => {
-          this.state.customTagsDB.forEach((DBtag) => {
-            if(formTag === DBtag)
-              inDB = true;
-          });
-
-          if(!inDB)
-            filteredFormCustomTags.push(formTag);
-          else
-            inDB = false;
+        
+        filteredFormCustomTags = formCustomTags.filter((formTag) => {     // filter out custom tags that already exists
+          return !this.state.customTagsDB.includes(formTag);
         });
 
-        if(filteredFormCustomTags[0]) {
-          var updatedCustomTags = this.state.customTagsDB.concat(filteredFormCustomTags);
+          if(filteredFormCustomTags[0]) {
+            var updatedCustomTags = this.state.customTagsDB.concat(filteredFormCustomTags);
 
-          allSubmittedTags = filteredFormCustomTags.concat(this.state.selectedTags);
-          updateBatch.update(userRef, { "customTags": updatedCustomTags });
-          this.setState({ customTagsDB: updatedCustomTags });
-        }
+            updateBatch.update(userRef, { "customTags": updatedCustomTags });
+            this.setState({ customTagsDB: updatedCustomTags });
+          }
       }
       else
         updateBatch.update(userRef, { "customTags": formCustomTags });
+
+      allSubmittedTags = formCustomTags.concat(this.state.selectedTags);
     }
 
     // Update all tag fields
@@ -152,12 +149,13 @@ class ContentPage extends Component {
     var tagNameFound = this.state.selectedTags.find((tagName) => { return tagName === tags.name });
 
     tagNameFound ?
-    newSelectedArray = this.state.selectedTags.filter((tagName) => tagName != tagNameFound)  //unselected
-    : newSelectedArray.push(tags.name);                                                       //selected
+    newSelectedArray = this.state.selectedTags.filter((tagName) => tagName != tagNameFound)  // unselecting
+    : newSelectedArray.push(tags.name);                                                       // selecting
 
     this.setState({
       selectedTags: newSelectedArray,
-      currentList: this.state.showForm ? this.state.currentList : this.getSelectedShowsData(tags.name, tagNameFound, newSelectedArray, this.state.viewWatchlist)
+      currentList: this.state.showForm ? this.state.currentList : this.getSelectedTagData(tags.name, tagNameFound, newSelectedArray, this.state.viewWatchlist)
+
     });
 }
 
@@ -176,7 +174,8 @@ class ContentPage extends Component {
    this.setState({ inputData: updatedData });
  }
 
- getSelectedShowsData = (tagName, isTagUnselected, sTags, isWatchlist) => {
+ getSelectedTagData = (tagName, isTagUnselected, sTags, isWatchlist) => {
+
    var cList = this.state.currentList;
    var userList = isWatchlist ? this.state.user.watchlist : this.state.user.watched;
    var newData = [];
@@ -240,15 +239,17 @@ class ContentPage extends Component {
 
  handleContentHeaderClick = (onWatchlistClick) => {
    var userList = onWatchlistClick ? this.state.user.watchlist : this.state.user.watched;
-   var list = this.getSelectedShowsData('', false, this.state.selectedTags, onWatchlistClick);
+
+   var list = [];
 
    if(userList) {
      if(userList.allShows) {
        if(this.state.selectedTags.length > 1) {
-         this.state.selectedTags.forEach((tag) => {
-           list = list.concat(this.getSelectedShowsData(tag, false, this.state.selectedTags, onWatchlistClick));
-         });
-        }
+           list = this.getSelectedTagData(this.state.selectedTags[0], true, this.state.selectedTags, onWatchlistClick);
+         }
+         else {
+           list = this.getSelectedTagData(this.state.selectedTags[0], false, this.state.selectedTags, onWatchlistClick);
+         }
       }
       else
         list = (this.state.selectedTags.length != 0) ? [] : 'empty';
@@ -335,7 +336,11 @@ class ContentPage extends Component {
 
           {this.state.currentList != 'empty' ?
             <div className={styles.showsList}>
-              <List data={this.state.currentList} />
+              <List
+                data={this.state.currentList}
+                uid={this.props.user.uid}
+                viewWatchlist={this.state.viewWatchlist}
+                 />
             </div>
           : <h1>Your list is empty! Please add a show.</h1> }
         </div>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { withFirebase } from '../Firebase';
+import DeleteShowButton from '../DeleteShowButton';
 import styles from './styles.scss';
 
 class List extends Component {
@@ -15,14 +16,25 @@ class List extends Component {
   makeList = (data, index) => {
     return (
       <li
-      key={data.name} >
-        {
-          data.URL != "" ?
-          <a href={data.URL} target="_blank">
-            {data.name}
-          </a>
-          : data.name
-        }
+        className={styles.listRow}
+        key={data.name} >
+        <div className={styles.showData}>
+          {
+            data.URL != "" ?
+            <a href={data.URL} target="_blank">
+              {data.name}
+            </a>
+            : data.name
+          }
+        </div>
+        <div
+          className={styles.deleteShowButton}>
+          <DeleteShowButton
+            target={data}
+            uid={this.props.uid}
+            viewWatchlist={this.props.viewWatchlist}
+             />
+        </div>
       </li>
     );
   }

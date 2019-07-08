@@ -1,0 +1,25 @@
+.deleteButton > button {
+  display: block;
+  width: 50px;
+  margin: 5px;
+  text-align: center;
+  position: relative;
+  text-decoration: none;
+  filter: brightness(80%);
+  border: medium solid white;
+  transition: transform 0.2s;
+  background-color: red;
+  font-size: 20px;
+  font-family: general, Helvetica, sans-serif;
+
+  &:hover {
+    transform: scale(1.05);
+    filter: brightness(100%);
+    border: solid dimgrey;
+    border-bottom: solid dimgrey 5px;
+  }
+
+  &:active {
+    border-style: inset;
+  }
+}
