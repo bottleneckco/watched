@@ -15,7 +15,8 @@ class ContentPage extends Component {
     this.state = {
       user: null,
       customTagsDB: null,       // custom tags that is in database
-      selectedTags: [],      // tags that user selected
+      selectedTags: [],         // tags that user selected
+      listTags: [],             // tags that was selected before toggling add show form
       defaultTags: [
         {name: 'Chinese', color: '#FF7373'},
         {name: 'English', color: '#FF7373'},
@@ -37,6 +38,8 @@ class ContentPage extends Component {
         customTags: '',     // custom tags that user typed during form submit
         isFormValid: false
       },
+      buttonState: {},
+      resetFormTags: false,
       showForm: false,
       firstSubmit: false,
       viewWatchlist: true,
@@ -86,7 +89,7 @@ class ContentPage extends Component {
       // Filter custom tags for existing tags
       if(this.state.customTagsDB.length != 0) {
         var filteredFormCustomTags = [];
-        
+
         filteredFormCustomTags = formCustomTags.filter((formTag) => {     // filter out custom tags that already exists
           return !this.state.customTagsDB.includes(formTag);
         });
@@ -127,6 +130,9 @@ class ContentPage extends Component {
 
     this.setState({
       firstSubmit: false,
+      resetFormTags: true,
+      selectedTags: [],
+      buttonState: {},
       inputData: updatedData
      });
 
@@ -144,18 +150,22 @@ class ContentPage extends Component {
     event.preventDefault();
   }
 
-  handleButtonTagClick = (tags, index) => {
-    var newSelectedArray = this.state.selectedTags;
-    var tagNameFound = this.state.selectedTags.find((tagName) => { return tagName === tags.name });
+  handleButtonTagClick = (tags) => {
+    let newSelectedArray = this.state.selectedTags;
+    let tagNameFound = this.state.selectedTags.find((tagName) => { return tagName === tags.name });
 
     tagNameFound ?
-    newSelectedArray = this.state.selectedTags.filter((tagName) => tagName != tagNameFound)  // unselecting
-    : newSelectedArray.push(tags.name);                                                       // selecting
+    newSelectedArray = this.state.selectedTags.filter((tagName) => tagName != tags.name)  // unselecting
+    : newSelectedArray.push(tags.name);                                                   // selecting
+
+    let newButtonState = this.state.buttonState;
+    newButtonState[tags.name] = !tagNameFound;
 
     this.setState({
       selectedTags: newSelectedArray,
-      currentList: this.state.showForm ? this.state.currentList : this.getSelectedTagData(tags.name, tagNameFound, newSelectedArray, this.state.viewWatchlist)
-
+      buttonState: newButtonState,
+      resetFormTags: false,
+      currentList: this.state.showForm ? this.state.currentList : this.getSelectedTagData(tags.name, this.state.buttonState[tags.name], newSelectedArray, this.state.viewWatchlist)
     });
 }
 
@@ -233,6 +243,9 @@ class ContentPage extends Component {
  toggleAddShow = () => {
    this.setState({
      showForm: !this.state.showForm,
+     listTags: !this.state.showForm ? this.state.selectedTags : [],
+     selectedTags: this.state.showForm ? this.state.listTags : [],
+     resetFormTags: false,
      firstSubmit: true
     });
  }
@@ -321,6 +334,9 @@ class ContentPage extends Component {
                 onChange={this.handleChange}
                 onTagClick={this.handleButtonTagClick}
                 tags={tags}
+                resetFormTags={this.state.resetFormTags}
+                buttonState={this.state.buttonState}
+                selectedTags={this.state.selectedTags}
                 emptyList={this.state.currentList != 'empty' ? false : true}
                 firstSubmit={this.state.firstSubmit}
                 isFormValid={this.state.inputData.isFormValid} />
@@ -328,8 +344,11 @@ class ContentPage extends Component {
             :
             <div className={styles.tags}>
               <ButtonTags
-                onTagClick={this.handleButtonTagClick}
                 tags={tags}
+                resetFormTags={this.state.resetFormTags}
+                buttonState={this.state.buttonState}
+                selectedTags={this.state.selectedTags}
+                onTagClick={this.handleButtonTagClick}
                 />
             </div>
            }

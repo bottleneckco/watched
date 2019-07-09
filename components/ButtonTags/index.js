@@ -5,8 +5,24 @@ import styles from './styles.scss';
 class ButtonTags extends Component {
   constructor(props) {
     super(props);
+  }
 
-    this.state = { buttons: {} };
+  componentDidMount() {
+    this.props.selectedTags.forEach((tagName) => {
+        document.getElementById(tagName).style.filter = 'brightness(110%)';
+        document.getElementById(tagName).style.border = 'medium solid grey';
+    });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if(nextProps.resetFormTags &&  this.props.selectedTags.length != 0) {
+      this.props.selectedTags.forEach((tagName) => {
+          document.getElementById(tagName).style.filter = 'brightness(80%)';
+          document.getElementById(tagName).style.border = 'medium solid white';
+      });
+      console.log(nextProps.resetFormTags && this.props.selectedTags.length != 0);
+    }
+    return nextProps.resetFormTags && this.props.selectedTags.length != 0;
   }
 
   makeButton = (tags, index) => {
@@ -27,14 +43,11 @@ class ButtonTags extends Component {
   }
 
   handleClick(tags, index) {
-    document.getElementById(tags.name).style.filter = this.state.buttons[tags.name] ? 'brightness(80%)' : 'brightness(110%)';
-    document.getElementById(tags.name).style.border = this.state.buttons[tags.name] ? 'medium solid white' : 'medium solid grey';
-    this.props.onTagClick(tags, index);
+    this.props.onTagClick(tags);
 
-    this.setState((prevState) => {
-      const buttons = Object.assign({}, prevState.buttons, { [tags.name]: !prevState.buttons[tags.name] });
-      return { buttons };
-    });
+    document.getElementById(tags.name).style.filter = this.props.buttonState[tags.name] ? 'brightness(110%)' : 'brightness(80%)';     // on : off
+    document.getElementById(tags.name).style.border = this.props.buttonState[tags.name] ? 'medium solid grey' : 'medium solid white';
+    console.log(tags.name + ": " + this.props.buttonState[tags.name]);
   }
 
   render() {
