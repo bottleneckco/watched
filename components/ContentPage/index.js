@@ -40,7 +40,7 @@ class ContentPage extends Component {
       },
       buttonState: {},
       pageMounted: false,
-      resetFormTags: false,
+      resetTags: false,
       showForm: false,
       firstSubmit: false,
       viewWatchlist: true,
@@ -168,7 +168,7 @@ class ContentPage extends Component {
 
     this.setState({
       firstSubmit: false,
-      resetFormTags: true,
+      resetTags: true,
       selectedTags: [],
       buttonState: {},
       inputData: resetInput
@@ -202,7 +202,7 @@ class ContentPage extends Component {
     this.setState({
       selectedTags: newSelectedArray,
       buttonState: newButtonState,
-      resetFormTags: false,
+      resetTags: false,
       currentList: this.state.showForm ? this.state.currentList : this.getSelectedTagData(tags.name, this.state.buttonState[tags.name], newSelectedArray, this.state.viewWatchlist)
     });
 }
@@ -278,7 +278,7 @@ class ContentPage extends Component {
      showForm: !this.state.showForm,
      listTags: !this.state.showForm ? this.state.selectedTags : [],
      selectedTags: this.state.showForm ? this.state.listTags : [],
-     resetFormTags: false,
+     resetTags: false,
      firstSubmit: true
     });
  }
@@ -292,7 +292,8 @@ class ContentPage extends Component {
        if(this.state.viewWatchlist == onWatchlistClick) {
          list = userList.allShows;
          this.setState({
-           resetFormTags: true,
+           resetTags: true,
+           listTags: [],
            selectedTags: [],
            buttonState: {}
          });
@@ -376,7 +377,7 @@ class ContentPage extends Component {
                 onChange={this.handleChange}
                 onTagClick={this.handleButtonTagClick}
                 tags={tags}
-                resetFormTags={this.state.resetFormTags}
+                resetTags={this.state.resetTags}
                 buttonState={this.state.buttonState}
                 selectedTags={this.state.selectedTags}
                 emptyList={this.state.currentList != 'empty' ? false : true}
@@ -387,7 +388,7 @@ class ContentPage extends Component {
             <div className={styles.tags}>
               <ButtonTags
                 tags={tags}
-                resetFormTags={this.state.resetFormTags}
+                resetTags={this.state.resetTags}
                 buttonState={this.state.buttonState}
                 selectedTags={this.state.selectedTags}
                 onTagClick={this.handleButtonTagClick}
