@@ -59,7 +59,7 @@ class AddShow extends Component {
           <div className={styles.formTags}>
             <ButtonTags
               tags={this.props.tags}
-              resetFormTags={this.props.resetFormTags}
+              resetTags={this.props.resetTags}
               buttonState={this.props.buttonState}
               selectedTags={this.props.selectedTags}
               onTagClick={this.props.onTagClick} />

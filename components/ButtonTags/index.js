@@ -15,13 +15,14 @@ class ButtonTags extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if(nextProps.resetFormTags &&  this.props.selectedTags.length != 0) {
+    if(nextProps.resetTags &&  this.props.selectedTags.length != 0) {
+      console.log();
       this.props.selectedTags.forEach((tagName) => {
           document.getElementById(tagName).style.filter = 'brightness(80%)';
           document.getElementById(tagName).style.border = 'medium solid white';
       });
     }
-    return nextProps.resetFormTags && this.props.selectedTags.length != 0;
+    return nextProps.resetTags && this.props.selectedTags.length != 0;
   }
 
   makeButton = (tags, index) => {
