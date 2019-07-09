@@ -125,15 +125,19 @@ class ContentPage extends Component {
       });     //end forEach
     }
 
-    let updatedData = this.state.inputData;
-    updatedData['isFormValid'] = false;
+    let resetInput = {
+      name: '',
+      url: '',
+      customTags: '',
+      isFormValid: false
+    };
 
     this.setState({
       firstSubmit: false,
       resetFormTags: true,
       selectedTags: [],
       buttonState: {},
-      inputData: updatedData
+      inputData: resetInput
      });
 
     updateBatch.commit().then(
