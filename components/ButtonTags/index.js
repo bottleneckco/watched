@@ -20,7 +20,6 @@ class ButtonTags extends Component {
           document.getElementById(tagName).style.filter = 'brightness(80%)';
           document.getElementById(tagName).style.border = 'medium solid white';
       });
-      console.log(nextProps.resetFormTags && this.props.selectedTags.length != 0);
     }
     return nextProps.resetFormTags && this.props.selectedTags.length != 0;
   }

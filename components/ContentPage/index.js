@@ -39,6 +39,7 @@ class ContentPage extends Component {
         isFormValid: false
       },
       buttonState: {},
+      pageMounted: false,
       resetFormTags: false,
       showForm: false,
       firstSubmit: false,
@@ -51,16 +52,49 @@ class ContentPage extends Component {
   componentDidMount() {
     this.unsubscribe = this.props.firebase.user(this.props.user.uid)
     .onSnapshot(snapshot => {
+      let userData = snapshot.data();
+      let userList = [];
       let cList = 'empty';
-      if(snapshot.data().watchlist) {
-        cList = snapshot.data().watchlist.allShows ? snapshot.data().watchlist.allShows : 'empty';
-      }
 
-      this.setState({
-        user: snapshot.data(),
-        customTagsDB: snapshot.data().customTags ? snapshot.data().customTags : [],
-        currentList: cList
-      });
+
+      if(userData.watchlist)
+        cList = userData.watchlist.allShows ? userData.watchlist.allShows : 'empty';
+      if(!this.state.pageMounted) {
+        this.setState({
+          user: userData,
+          customTagsDB: userData.customTags ? userData.customTags : [],
+          currentList: cList,
+          pageMounted: true
+        });
+      }
+      else {
+        let list = [];
+        if(this.state.showForm) {     // if form, don't update list
+          if(this.state.viewWatchlist)
+            userList = userData.watchlist ? userData.watchlist : [];
+          else
+            userList = userData.watched ? userData.watched : [];
+
+          if(userList) {
+            if(userList.allShows) {
+              if(this.state.listTags.length > 1) {
+                  list = this.getSelectedTagData(this.state.listTags[0], true, this.state.listTags, this.state.viewWatchlist);
+              } else {
+                  list = this.getSelectedTagData(this.state.listTags[0], false, this.state.listTags, this.state.viewWatchlist);
+              }
+            } else
+                list = (this.state.listTags.length != 0) ? [] : 'empty';
+          } else
+              list = 'empty';
+        } else                            // if not form, update list from db
+            list = cList;
+
+        this.setState({
+          user: userData,
+          customTagsDB: userData.customTags ? userData.customTags : [],
+          currentList: list
+        });
+      }
     });
   }
 
@@ -194,52 +228,47 @@ class ContentPage extends Component {
    var userList = isWatchlist ? this.state.user.watchlist : this.state.user.watched;
    var newData = [];
 
-   if(!this.state.showForm) {
-     if(sTags.length > 1) {
+   if(sTags.length > 1) {
+     if(isTagUnselected) {
+       newData = userList[sTags[0]] || [];
 
-       if(isTagUnselected) {
-         newData = userList[sTags[0]] || [];
+       for(let i=1; i < sTags.length; i++) {
+         let tempList = [];
+         let currentTagShows = userList[sTags[i]] || [];
 
-         for(let i=1; i < sTags.length; i++) {
-           let tempList = [];
-           let currentTagShows = userList[sTags[i]] || [];
-
-           currentTagShows.forEach((show) => {
-             for(let i = 0; i < newData.length; i++) {
-               if(show.name ===  newData[i].name) {
-                 tempList.push(show);
-                 break;
-               }
-             }
-           });
-           newData = tempList;
-         }
-       }
-       else {
-         let selectedTagShows = userList[tagName] || [];
-
-         selectedTagShows.forEach((show) => {
-           for(let i = 0; i < cList.length; i++) {
-             if(show.name === cList[i].name) {
-               newData.push(show);
+         currentTagShows.forEach((show) => {
+           for(let i = 0; i < newData.length; i++) {
+             if(show.name ===  newData[i].name) {
+               tempList.push(show);
                break;
              }
            }
          });
+         newData = tempList;
        }
-     }
-     else {
-       switch (sTags.length) {
-         case 0: newData = userList.allShows;
-         break;
+     } else {
+       let selectedTagShows = userList[tagName] || [];
 
-         case 1: newData = userList[sTags[0]] || [];
-         break;
-
-         default: []
-       }
+       selectedTagShows.forEach((show) => {
+         for(let i = 0; i < cList.length; i++) {
+           if(show.name === cList[i].name) {
+             newData.push(show);
+             break;
+           }
+         }
+       });
      }
-   };
+   } else {
+     switch (sTags.length) {
+       case 0: newData = userList.allShows;
+       break;
+
+       case 1: newData = userList[sTags[0]] || [];
+       break;
+
+       default: []
+     }
+   }
 
    return newData;
  }
@@ -255,18 +284,27 @@ class ContentPage extends Component {
  }
 
  handleContentHeaderClick = (onWatchlistClick) => {
-   var userList = onWatchlistClick ? this.state.user.watchlist : this.state.user.watched;
-
-   var list = [];
+   let userList = onWatchlistClick ? this.state.user.watchlist : this.state.user.watched;
+   let list = [];
 
    if(userList) {
      if(userList.allShows) {
-       if(this.state.selectedTags.length > 1) {
-           list = this.getSelectedTagData(this.state.selectedTags[0], true, this.state.selectedTags, onWatchlistClick);
-         }
-         else {
-           list = this.getSelectedTagData(this.state.selectedTags[0], false, this.state.selectedTags, onWatchlistClick);
-         }
+       if(this.state.viewWatchlist == onWatchlistClick) {
+         list = userList.allShows;
+         this.setState({
+           resetFormTags: true,
+           selectedTags: [],
+           buttonState: {}
+         });
+       }
+       else {
+         if(this.state.selectedTags.length > 1) {
+            list = this.getSelectedTagData(this.state.selectedTags[0], true, this.state.selectedTags, onWatchlistClick);
+          }
+          else {
+            list = this.getSelectedTagData(this.state.selectedTags[0], false, this.state.selectedTags, onWatchlistClick);
+          }
+        }
       }
       else
         list = (this.state.selectedTags.length != 0) ? [] : 'empty';
@@ -283,7 +321,7 @@ class ContentPage extends Component {
   render() {
     console.log(this.state.selectedTags);
     if(this.state.currentList === null) {
-        return <h1> loading... </h1>;
+      return <h1> loading... </h1>;
     }
     else {
       let customTagsArray = [];
